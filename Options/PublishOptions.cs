@@ -14,6 +14,12 @@ namespace DevBlog.AdminCli.Options
         [Value(2, MetaName = "url", HelpText = "Content url")]
         public string Url { get; set; }
 
+        [Value(3, MetaName = "summary", HelpText = "Content summary")]
+        public string Summary { get; set; }
+
+        [Value(4, MetaName = "imageUrl", HelpText = "Content image URL")]
+        public string ImageUrl { get; set; }
+
         [Option(Default = "markdown", HelpText = "Content format")]
         public string Format { get; set; }
 

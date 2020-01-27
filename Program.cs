@@ -22,6 +22,8 @@ namespace DevBlog.AdminCli
                             Id = publishOptions.Id,
                             Title = publishOptions.Title,
                             Url = publishOptions.Url,
+                            Summary = publishOptions.Summary,
+                            ImageUrl = publishOptions.ImageUrl,
                             Format = publishOptions.Format,
                             Hidden = publishOptions.Hidden
                         };
@@ -46,6 +48,8 @@ namespace DevBlog.AdminCli
                             Id = updateOptions.Id,
                             Title = updateOptions.Title,
                             Url = updateOptions.Url,
+                            Summary = updateOptions.Summary,
+                            ImageUrl = updateOptions.ImageUrl,
                             Format = updateOptions.Format,
                             Hidden = updateOptions.Hidden
                         };
