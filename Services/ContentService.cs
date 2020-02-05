@@ -9,7 +9,7 @@ namespace DevBlog.AdminCli.Services
 {
     public class ContentService : IContentService
     {
-        private const string GrpcServer = "http://localhost:5001";
+        private const string GrpcServer = "http://localhost:7777";
 
         private Content.ContentClient _client;
 
