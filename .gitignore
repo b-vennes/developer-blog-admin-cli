@@ -1,0 +1,10 @@
+/target
+**/*.rs.bk
+
+# Visual Studio Code
+.vscode
+
+# .NET Core
+bin
+obj
+appsettings*.json
