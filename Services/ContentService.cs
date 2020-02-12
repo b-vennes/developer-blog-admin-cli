@@ -29,6 +29,13 @@ namespace DevBlog.AdminCli.Services
                     Message = $"RPC failure: {rpcException.Message}"
                 };
             }
+            catch (Exception ex)
+            {
+                return new Result() {
+                    Success = false,
+                    Message = $"Error: {ex.Message}"
+                };
+            }
         }
 
         public Result Publish(PublishRequest publishRequest)
@@ -47,6 +54,13 @@ namespace DevBlog.AdminCli.Services
                     Message = $"RPC failure: {rpcException.Message}"
                 };
             }
+            catch (Exception ex)
+            {
+                return new Result() {
+                    Success = false,
+                    Message = $"Error: {ex.Message}"
+                };
+            }
         }
 
         public Result Update(UpdateRequest updateRequest)
@@ -63,6 +77,13 @@ namespace DevBlog.AdminCli.Services
                 return new Result() {
                     Success = false,
                     Message = $"RPC failure: {rpcException.Message}"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Result() {
+                    Success = false,
+                    Message = $"Error: {ex.Message}"
                 };
             }
         }
