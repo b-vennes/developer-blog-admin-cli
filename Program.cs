@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Net;
 using CommandLine;
+using DevBlog.AdminCli.Dtos;
 using DevBlog.AdminCli.Options;
-using DevBlog.AdminCli.Protos;
 using DevBlog.AdminCli.Services;
 using Microsoft.Extensions.DependencyInjection;
+using RestSharp;
 
 namespace DevBlog.AdminCli
 {
@@ -16,9 +18,9 @@ namespace DevBlog.AdminCli
             Parser.Default.ParseArguments<PublishOptions, UpdateOptions, DeleteOptions>(args)
                 .MapResult(
                     (PublishOptions publishOptions) => {
-                        var contentService = services.GetService<IContentService>();
+                        var contentService = services.GetService<IAdminContentService>();
 
-                        var publishRequest = new PublishRequest() {
+                        var publishRequest = new PublishContentDto() {
                             Id = publishOptions.Id,
                             Title = publishOptions.Title,
                             Url = publishOptions.Url,
@@ -30,22 +32,21 @@ namespace DevBlog.AdminCli
 
                         var result = contentService.Publish(publishRequest);
 
-                        if (result.Success)
+                        if (result.StatusCode == HttpStatusCode.NoContent)
                         {
                             Console.WriteLine("Published content successfully!");
                         }
                         else 
                         {
-                            Console.WriteLine($"Error publishing content: {result.Message}");
+                            Console.WriteLine($"Error publishing content: Status Message -- {result.StatusDescription}, Message -- {result.Content}");
                         }
 
                         return 0;
                     },
                     (UpdateOptions updateOptions) => {
-                        var contentService = services.GetService<IContentService>();
+                        var contentService = services.GetService<IAdminContentService>();
 
-                        var updateRequest = new UpdateRequest() {
-                            Id = updateOptions.Id,
+                        var updateRequest = new UpdateContentDto() {
                             Title = updateOptions.Title,
                             Url = updateOptions.Url,
                             Summary = updateOptions.Summary,
@@ -54,35 +55,31 @@ namespace DevBlog.AdminCli
                             Hidden = updateOptions.Hidden
                         };
 
-                        var result = contentService.Update(updateRequest);
+                        var result = contentService.Update(updateOptions.Id, updateRequest);
 
-                        if (result.Success)
+                        if (result.StatusCode == HttpStatusCode.NoContent)
                         {
                             Console.WriteLine("Updated content successfully!");
                         }
                         else 
                         {
-                            Console.WriteLine($"Error updating content: {result.Message}");
+                            Console.WriteLine($"Error publishing content: Status Message -- {result.StatusDescription}, Message -- {result.Content}");
                         }
 
                         return 0;
                     },
                     (DeleteOptions deleteOptions) => {
-                        var contentService = services.GetService<IContentService>();
+                        var contentService = services.GetService<IAdminContentService>();
 
-                        var deleteRequest = new DeleteRequest() {
-                            Id = deleteOptions.Id
-                        };
+                        var result = contentService.Delete(deleteOptions.Id);
 
-                        var result = contentService.Delete(deleteRequest);
-
-                        if (result.Success)
+                        if (result.StatusCode == HttpStatusCode.NoContent)
                         {
                             Console.WriteLine("Deleted content successfully!");
                         }
                         else 
                         {
-                            Console.WriteLine($"Error deleting content: {result.Message}");
+                            Console.WriteLine($"Error publishing content: Status Message -- {result.StatusDescription}, Message -- {result.Content}");
                         }
 
                         return 0;
@@ -94,7 +91,11 @@ namespace DevBlog.AdminCli
         private static ServiceProvider GetConfiguredServices()
         {
             return new ServiceCollection()
-                .AddSingleton<IContentService, ContentService>()
+                .AddSingleton<IRestClient, RestClient>()
+                .AddSingleton<IAdminContentService, AdminContentService>(s => {
+                    var restClient = s.GetService<IRestClient>();
+                    return new AdminContentService(restClient);
+                })
                 .BuildServiceProvider();
         }
     }
