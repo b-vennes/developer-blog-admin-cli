@@ -30,7 +30,7 @@ namespace DevBlog.AdminCli
                             Hidden = publishOptions.Hidden
                         };
 
-                        var result = contentService.Publish(publishRequest);
+                        var result = contentService.Publish(publishRequest, publishOptions.Passcode);
 
                         if (result.StatusCode == HttpStatusCode.NoContent)
                         {
@@ -55,7 +55,7 @@ namespace DevBlog.AdminCli
                             Hidden = updateOptions.Hidden
                         };
 
-                        var result = contentService.Update(updateOptions.Id, updateRequest);
+                        var result = contentService.Update(updateOptions.Id, updateRequest, updateOptions.Passcode);
 
                         if (result.StatusCode == HttpStatusCode.NoContent)
                         {
@@ -71,7 +71,7 @@ namespace DevBlog.AdminCli
                     (DeleteOptions deleteOptions) => {
                         var contentService = services.GetService<IAdminContentService>();
 
-                        var result = contentService.Delete(deleteOptions.Id);
+                        var result = contentService.Delete(deleteOptions.Id, deleteOptions.Passcode);
 
                         if (result.StatusCode == HttpStatusCode.NoContent)
                         {

@@ -8,6 +8,9 @@ namespace DevBlog.AdminCli.Options
         [Value(0, MetaName = "id", HelpText = "Content id")]
         public string Id { get; set; }
 
+        [Value(1, MetaName = "passcode", HelpText = "Authorization passcode")]
+        public string Passcode { get; set; }
+
         [Option(Default = null, HelpText = "Updated content title")]
         public string Title { get; set; }
 
